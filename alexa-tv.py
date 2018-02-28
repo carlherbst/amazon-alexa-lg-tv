@@ -11,7 +11,8 @@
     The IP of the triggering Echo is also passed into the act() function, so you can
     do different things based on which Echo triggered the handler.
 """
-
+import urllib
+import time
 import fauxmo
 import logging
 import time
@@ -24,7 +25,24 @@ class device_handler(debounce_handler):
     """Publishes the on/off state requested,
        and the IP address of the Echo making the request.
     """
-    TRIGGERS = {"tv": 52000, "plex":52001, "volume": 52002, "netflix": 52003, "playback": 52004, "receiver": 52005, "playstation": 52006}
+    TRIGGERS = {
+                    "tv": 52000,
+                    "plex":52001,
+                    "youtube": 52002,
+                    "netflix": 52003,
+                    "playback": 52004,
+                    "receiver": 52005,
+                    "home theater": 52006,
+                    "gaming pc": 52007,
+                    "playstation": 52008,
+                    "snes": 52009,
+                    "super nintendo": 52010,
+                    "switch": 52011,
+                    "nintendo switch": 52012,
+                    "giant bomb": 52013
+               }
+
+##TODO: port over other archive scripts?
 
     def act(self, client_address, state, name):
         print "State", state, "on ", name, "from client @", client_address
@@ -58,12 +76,26 @@ class device_handler(debounce_handler):
         elif name == "playback" and state == False:
             os.system("python lgtv.py inputMediaPause")
             print "Playback set to PAUSE"
-        elif name == "receiver" and state == True:
+        elif name == "home theater" and state == True:
             os.system("python lgtv.py setInput HDMI_2")
-            print "Input set to HDMI X"
+            print "TV input set to HDMI 2 (receiver)"
+
+
+            time.sleep(0.25)
+            print "Sleep for 250ms"
+
+            urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/SAT/CBL")
+            print "Receiver Input set to SAT/CBL (htpc)"
+
+
         elif name == "playstation" and state == True:
             os.system("python lgtv.py setInput HDMI_2")
-            print "Input set to HDMI 2 (receiver)"
+            print "TV input set to HDMI 2 (receiver)"
+            time.sleep(0.25)
+            print "Sleep for 250ms"
+            urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/GAME")
+            print "Receiver input set to GAME (ps4)"
+
 
         return True
 
