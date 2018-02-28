@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 class device_handler(debounce_handler):
     """Publishes the on/off state requested,
        and the IP address of the Echo making the request.
+       Note: can use alexa smarthome groups for aliases!
     """
     TRIGGERS = {
                     "tv": 52000,
@@ -36,68 +37,81 @@ class device_handler(debounce_handler):
                     "gaming pc": 52007,
                     "playstation": 52008,
                     "snes": 52009,
-                    "super nintendo": 52010,
                     "switch": 52011,
                     "nintendo switch": 52012,
-                    "giant bomb": 52013
+                    "giant bomb": 52013,
+                    "archive script": 52014
                }
 
 ##TODO: port over other archive scripts?
 
+
+    def tvPower(state):
+        print "do tv power thing with state " + state
+
     def act(self, client_address, state, name):
         print "State", state, "on ", name, "from client @", client_address
-        if name == "tv" and state == True:
-            os.system("python lgtv.py on")
-            print "Magic packet sent to turn on TV!"
-        elif name == "tv" and state == False:
-            os.system("python lgtv.py off")
-            print "TV turned off!"
-        elif name == "plex" and state == True:
-            os.system("python lgtv.py startApp cdp-30")
-            print "Launched Plex"
-        elif name == "plex" and state == False:
-            os.system("python lgtv.py closeApp cdp-30")
-            print "Closed Plex"
-        elif name == "netflix" and state == True:
-            os.system("python lgtv.py startApp netflix")
-            print "Launched Netflix"
-        elif name == "netflix" and state == False:
-            os.system("python lgtv.py closeApp netflix")
-            print "Closed Netflix"
-        elif name == "volume" and state == True:
-            os.system("python lgtv.py setVolume 44")
-            print "Volume set to FOURTYFOUR"
-        elif name == "volume" and state == False:
-            os.system("python lgtv.py setVolume 0")
-            print "Volume set to ZERO"
-        elif name == "playback" and state == True:
-            os.system("python lgtv.py inputMediaPlay")
-            print "Playback set to RESUME"
-        elif name == "playback" and state == False:
-            os.system("python lgtv.py inputMediaPause")
-            print "Playback set to PAUSE"
-        elif name == "home theater" and state == True:
-            os.system("python lgtv.py setInput HDMI_2")
-            print "TV input set to HDMI 2 (receiver)"
+        actions = {
+            "tv": tvPower(state)
+        }
+
+        actions[name](state)
+        return true;
+
+    # def act(self, client_address, state, name):
+    #     print "State", state, "on ", name, "from client @", client_address
+    #     if name == "tv" and state == True:
+    #         os.system("python lgtv.py on")
+    #         print "Magic packet sent to turn on TV!"
+    #     elif name == "tv" and state == False:
+    #         os.system("python lgtv.py off")
+    #         print "TV turned off!"
+    #     elif name == "plex" and state == True:
+    #         os.system("python lgtv.py startApp cdp-30")
+    #         print "Launched Plex"
+    #     elif name == "plex" and state == False:
+    #         os.system("python lgtv.py closeApp cdp-30")
+    #         print "Closed Plex"
+    #     elif name == "netflix" and state == True:
+    #         os.system("python lgtv.py startApp netflix")
+    #         print "Launched Netflix"
+    #     elif name == "netflix" and state == False:
+    #         os.system("python lgtv.py closeApp netflix")
+    #         print "Closed Netflix"
+    #     elif name == "volume" and state == True:
+    #         os.system("python lgtv.py setVolume 44")
+    #         print "Volume set to FOURTYFOUR"
+    #     elif name == "volume" and state == False:
+    #         os.system("python lgtv.py setVolume 0")
+    #         print "Volume set to ZERO"
+    #     elif name == "playback" and state == True:
+    #         os.system("python lgtv.py inputMediaPlay")
+    #         print "Playback set to RESUME"
+    #     elif name == "playback" and state == False:
+    #         os.system("python lgtv.py inputMediaPause")
+    #         print "Playback set to PAUSE"
+    #     elif name == "home theater" and state == True:
+    #         os.system("python lgtv.py setInput HDMI_2")
+    #         print "TV input set to HDMI 2 (receiver)"
 
 
-            time.sleep(0.25)
-            print "Sleep for 250ms"
+    #         time.sleep(0.25)
+    #         print "Sleep for 250ms"
 
-            urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/SAT/CBL")
-            print "Receiver Input set to SAT/CBL (htpc)"
-
-
-        elif name == "playstation" and state == True:
-            os.system("python lgtv.py setInput HDMI_2")
-            print "TV input set to HDMI 2 (receiver)"
-            time.sleep(0.25)
-            print "Sleep for 250ms"
-            urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/GAME")
-            print "Receiver input set to GAME (ps4)"
+    #         urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/SAT/CBL")
+    #         print "Receiver Input set to SAT/CBL (htpc)"
 
 
-        return True
+    #     elif name == "playstation" and state == True:
+    #         os.system("python lgtv.py setInput HDMI_2")
+    #         print "TV input set to HDMI 2 (receiver)"
+    #         time.sleep(0.25)
+    #         print "Sleep for 250ms"
+    #         urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/GAME")
+    #         print "Receiver input set to GAME (ps4)"
+
+
+    #     return True
 
 
 if __name__ == "__main__":
