@@ -52,15 +52,6 @@ class device_handler(debounce_handler):
         print "State", state, "on ", name, "from client @", client_address
 
         #func dict might be a bit slower, but sure is a lot easier to read/add to
-        
-
-#giant bomb tv
-#lgtv.py openBrowserAt https://www.youtube.com/watch?v=bgGohC9jIl8
-
-#giant bomb latest videos
-#lgtv.py openBrowserAt https://www.giantbomb.com/videos/latest/
-
-
 
         def tvPower(self, state):
             if(state):
@@ -70,7 +61,7 @@ class device_handler(debounce_handler):
                 print "Requesting TV to turn off turn off"                
                 os.system("python lgtv.py off")
             return True
-        
+
         def switchPlayback(self, state):
             if(state):
                 os.system("python lgtv.py inputMediaPlay")
@@ -84,7 +75,6 @@ class device_handler(debounce_handler):
             os.system("python lgtv.py mute " + str(state))
             print "Mute set to " + str(state)
             return True
-        
 
         def switchPlex(self, state):
             if(state):
@@ -103,7 +93,7 @@ class device_handler(debounce_handler):
                 os.system("python lgtv.py closeApp com.itkey.plexclient")
                 print "Closed X Play"
             return True
-        
+
         def switchYoutube(self, state):
             if(state):
                 os.system("python lgtv.py startApp youtube.leanback.v4")
@@ -112,7 +102,7 @@ class device_handler(debounce_handler):
                 os.system("python lgtv.py closeApp youtube.leanback.v4")
                 print "Closed Plex"
             return True
-            
+
         def switchNetflix(self, state):
             if(state):
                 os.system("python lgtv.py startApp netflix")
@@ -126,21 +116,21 @@ class device_handler(debounce_handler):
             os.system("python lgtv.py setInput HDMI_2")
             print "TV input set to HDMI 2 (receiver)"
             return True
-        
+
         def switchToHomeTheater(self, state):
             switchToReceiver(self, True)
             #sleep to wait?
             urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/SAT/CBL")
             print "Receiver Input set to SAT/CBL (htpc)"
             return True
-        
+
         def switchToGamingPC(self, state):
             switchToReceiver(self, True)
             #sleep to wait?
             #urllib.urlopen("http://10.0.1.91/MainZone/index.put.asp?cmd0=PutZone_InputFunction/SAT/CBL")
             print "Receiver Input set to ??? (Gaming PC)"
             return True
-        
+
         def switchToPlaystation(self, state):
             switchToReceiver(self, True)
             #sleep to wait?
@@ -190,7 +180,7 @@ class device_handler(debounce_handler):
         actions = {
             "tv": tvPower,
             "playback": switchPlayback,
-            "mute": switchMute,               
+            "mute": switchMute,
             "plex":switchPlex,
             "x play":switchXplay,
             "youtube": switchYoutube,
